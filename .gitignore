@@ -5,8 +5,10 @@ Objects/
 
 # Keil 用户界面状态（机器相关）
 *.uvguix.*
+*.uvoptx
 *.bak
 *.base@*
 
-# J-Link 本地日志
+# J-Link 本地配置和日志
 JLinkLog.txt
+JLinkSettings.ini
