@@ -1,0 +1,12 @@
+# Keil 构建输出
+build/
+Listings/
+Objects/
+
+# Keil 用户界面状态（机器相关）
+*.uvguix.*
+*.bak
+*.base@*
+
+# J-Link 本地日志
+JLinkLog.txt
