@@ -484,6 +484,11 @@
               <FileType>1</FileType>
               <FilePath>.\drivers\device\device_led.c</FilePath>
             </File>
+            <File>
+              <FileName>device_buzzer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\drivers\device\device_buzzer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

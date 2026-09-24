@@ -27,16 +27,18 @@ chair_reminder：座椅久坐提醒器，GD32L233RC（Cortex-M23）裸机固件�
 
 ## 禁区清单
 
-（暂无，按约定 7 累积）
+1. device 层禁止用 `bsp_timer_delay_ms` / `bsp_timer_delay_us`（它们会重配 TIMER6 tick 频率，破坏其他模块的延时）。约定 TIMER6 固定 1MHz tick，延时写法：`for` 循环逐 ms 调 `bsp_timer_delay_ticks(TIMER6, 1000U)`。
+2. AF 复用号必须以数据手册原表渲染图目视核对为准（pdftotext 提取会错列，已因此误配过：PA0/PA1 的定时器通道是 AF1，PB14/PB15 的 TIMER11 通道是 AF2）。芯片外设输出异常时先怀疑 AF 配置，不要怀疑芯片。
 
 ## 资源分配表
 
 | 资源 | 引脚/通道 | 用途 |
 |---|---|---|
 | USART0 | PA9(TX)/PA10(RX), AF7, 115200 | log 日志输出 |
-| TIMER1 CH1/CH2/CH3 | PA1/PA2/PA3, 1kHz PWM | RGB LED 呼吸灯 |
+| TIMER1 CH1/CH2/CH3 | PA1/PA2/PA3, AF1, 1kHz PWM | RGB LED 呼吸灯 |
 | TIMER2 | — | log 时间戳（1ms 自由运行） |
 | TIMER6 | — | 轮询延时（bsp_timer） |
+| TIMER11 CH0 | PB14, AF2, 4kHz PWM | 无源蜂鸣器 |
 
 ## 汇报格式
 
