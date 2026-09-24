@@ -3,6 +3,8 @@
 #include "bsp_timer.h"
 
 #define PWM_FREQ_HZ        1000U
+#define TIMER6_TICK_HZ     1000000U  /* TIMER6 延时基准：1MHz，即 1us 一个 tick */
+#define TIMER6_TICKS_PER_MS  (TIMER6_TICK_HZ / 1000U)
 #define BREATH_STEPS       32U
 #define BREATH_STEP_MS     40U
 #define PEAK_HOLD_MS       800U
@@ -26,15 +28,15 @@ static void breath_set_duty(uint8_t duty)
 static void breath_delay_ms(uint32_t ms)
 {
     for (uint32_t i = 0U; i < ms; i++) {
-        bsp_timer_delay_ticks(TIMER6, 1000U);
+        bsp_timer_delay_ticks(TIMER6, TIMER6_TICKS_PER_MS);
     }
 }
 
 void device_led_init(void)
 {
-    /* PA1=R(TIMER1_CH1, AF0), PA2=G(TIMER1_CH2, AF1), PA3=B(TIMER1_CH3, AF1) */
+    /* PA1=R(TIMER1_CH1, AF1), PA2=G(TIMER1_CH2, AF1), PA3=B(TIMER1_CH3, AF1) */
     const bsp_pwm_cfg_t pwm_r = {
-        TIMER1, TIMER_CH_1, GPIOA, GPIO_PIN_1, GPIO_AF_0,
+        TIMER1, TIMER_CH_1, GPIOA, GPIO_PIN_1, GPIO_AF_1,
         TIMER_OC_POLARITY_HIGH, PWM_FREQ_HZ, 0U
     };
 
@@ -42,7 +44,7 @@ void device_led_init(void)
     bsp_pwm_channel_add(TIMER1, TIMER_CH_2, GPIOA, GPIO_PIN_2, GPIO_AF_1, TIMER_OC_POLARITY_HIGH);
     bsp_pwm_channel_add(TIMER1, TIMER_CH_3, GPIOA, GPIO_PIN_3, GPIO_AF_1, TIMER_OC_POLARITY_HIGH);
 
-    bsp_timer_init(TIMER6, 1000000U);
+    bsp_timer_init(TIMER6, TIMER6_TICK_HZ);
 }
 
 void device_led_breath_run(void)
